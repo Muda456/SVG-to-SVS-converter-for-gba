@@ -1,53 +1,40 @@
-# ATJ2259C GBA `.svg` conversion
+# 山寨机 GBA 即时存档：SVG 转 SVS
 
-This machine’s GBA core is a MIPS port of **gameplaySP (gpSP)** (`cpu_threaded.c`, `memory.c`, `savestate_write_buffer[506940+%d]`). The `.svg` files are **instant savestates**, not battery `.sav` files. SRAM is not stored in them (only a host-side flash pointer).
+这台机器的 GBA 核心是 **gameplaySP（gpSP）** 的 MIPS 移植。`.svg` 是**即时存档**，不是游戏内存档 `.sav`。SRAM 不在 `.svg` 里。
 
-The original handheld is dead, so patching `gba.drv` to write `.sav` is not useful unless you can run that MIPS + MicroC/OS-II stack on a PC (full SoC emulation). That is not a practical path.
+## 怎么用
 
-## What works instead
+1. 运行仓库根目录的 `svg2svs.exe`（或双击 `svg转svs.bat`）。
+2. 选择山寨机上的 `.svg`，转换成 PC 能读的 `.svs`。
+3. 用 **旧版 gpSP**（notaz gpSP / gpSP 0.9）加载这个 `.svs`。  
+   RetroArch 的 gpSP 用另一套存档格式，**读不了**。
+4. 读档成功后，再在模拟器里用游戏内存档，才会得到 `.sav`。
 
-1. **Parse the `.svg` and rebuild a classic gpSP `.svs`** (this repo).
-2. Load that `.svs` in **old gpSP** (notaz gpSP / gpSP 0.9 SDL).  
-   Current RetroArch gpSP uses BSON savestates and **will reject** these files.
-3. After it loads in old gpSP, use that emulator’s **in-game save** if you later want a `.sav`. That `.sav` is created by the emulator from RAM, not copied out of the `.svg`.
+mGBA、VBA-M 不能直接读 gpSP 的即时存档。
 
-mGBA / VBA-M cannot load gpSP packed states. A full mGBA serializer is a separate project; the dumped `iwram.bin` / `ewram.bin` / `io.bin` are the raw materials for it.
+也可命令行转换：
 
-## gpSP source (for loading `.svs`)
+```powershell
+python tools/svg_convert.py "游戏.svg" -o "输出目录"
+```
 
-Downloaded into `gpsp/`:
+输出：
 
-- `gpsp/notaz-gpsp` — https://github.com/notaz/gpsp (ARM Linux fork; includes `x86/` SDL makefile)
-- `gpsp/gpsp-0.9` — https://github.com/BASLQC/gPSP (Exophase 0.9; also has `x86/` SDL makefile)
+- `*.svs` — 经典 gpSP 即时存档（506,943 字节）
+- `iwram.bin`、`ewram.bin` 等内存转储（调试用）
 
-There is no official Windows installer. PC build is 32-bit SDL 1.2:
+## 模拟器
+
+PC 版 gpSP 没有官方安装包，需要 32 位 SDL 1.2 自行编译：
 
 ```text
 cd gpsp/notaz-gpsp/x86
 make
 ```
 
-Needs 32-bit gcc, SDL 1.2, zlib, and `gba_bios.bin` (copy from `aaa/firmware_files/FWIM/gba_bios.bin`). F5/F7 are save/load state in the PC build.
+需要 `gba_bios.bin`。默认存档键 F5、读档键 F7。
 
-PSP 0.9 signed pack (your `gpsp09.zip`) is extracted at `gpsp/gpsp09-psp/gpsp/` (`EBOOT.PBP` + `game_config.txt`). That binary only runs on a PSP, not on Windows.
+## 注意
 
-## Convert a clone `.svg`
-
-```powershell
-python tools/svg_convert.py "aaa\恶魔城~1.svg" -o "aaa\converted"
-```
-
-Output:
-
-- `*.svs` — classic gpSP savestate (506,943 bytes)
-- `iwram.bin` `ewram.bin` `vram.bin` `oam.bin` `palette.bin` `io.bin`
-- `cpu.json` — PC, CPSR, timers, DISPCNT
-- `palette_strip.bmp` — 512-color GBA palette (sanity check)
-
-## Firmware unpack (already done)
-
-`aaa/firmware.afi` is SQLite. Files are in `aaa/firmware_files/`. GBA pieces: `FWIM/gba.drv`, `gba_bios.bin`, `gba_buff.drv`, `emulator.app`.
-
-```powershell
-python tools/atj_unpack.py --fwu "firmware.fw" -o "firmware.afi"
-```
+- 这是即时存档转换，**不含**游戏电池存档（SRAM）。
+- 不要把 ROM、BIOS、固件传到公开仓库。
