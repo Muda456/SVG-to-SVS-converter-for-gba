@@ -1,4 +1,4 @@
-# 山寨机 GBA 即时存档：SVG 转 SVS
+# 炬力机GBA即时存档：SVG 转 SVS
 
 这台机器的 GBA 核心是 **gameplaySP（gpSP）** 的 MIPS 移植。`.svg` 是**即时存档**，不是游戏内存档 `.sav`。SRAM 不在 `.svg` 里。
 
