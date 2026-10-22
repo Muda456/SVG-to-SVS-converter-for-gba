@@ -23,18 +23,3 @@ python tools/svg_convert.py "游戏.svg" -o "输出目录"
 - `*.svs` — 经典 gpSP 即时存档（506,943 字节）
 - `iwram.bin`、`ewram.bin` 等内存转储（调试用）
 
-## 模拟器
-
-PC 版 gpSP 没有官方安装包，需要 32 位 SDL 1.2 自行编译：
-
-```text
-cd gpsp/notaz-gpsp/x86
-make
-```
-
-需要 `gba_bios.bin`。默认存档键 F5、读档键 F7。
-
-## 注意
-
-- 这是即时存档转换，**不含**游戏电池存档（SRAM）。
-- 不要把 ROM、BIOS、固件传到公开仓库。
