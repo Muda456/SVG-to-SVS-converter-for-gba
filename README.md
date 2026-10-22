@@ -2,7 +2,7 @@
 
 这台机器的 GBA 核心是 **gameplaySP（gpSP）** 的 MIPS 移植。`.svg` 是**即时存档**，不是游戏内存档 `.sav`。SRAM 不在 `.svg` 里。
 
-## 怎么用
+## 使用方法
 
 1. 运行仓库根目录的 `svg2svs.exe`（或双击 `svg转svs.bat`）。
 2. 选择山寨机上的 `.svg`，转换成 PC 能读的 `.svs`。
