@@ -1,10 +1,10 @@
-# 山寨机 gpSP（内置 SVG 即时存档导入）
+# pc-gpSP（可导入SVG即时存档）
 
 Windows 版 **gpSP**，带菜单。山寨机 `.svg` 即时存档可在模拟器里直接导入，不用单独的转换工具。
 
 `.svg` 是即时存档，不是游戏内存档 `.sav`。SRAM 不在 `.svg` 里。
 
-## 怎么用
+## 使用
 
 1. 打开 `gpsp-windows\gpsp.exe`
 2. 把 `gba_bios.bin` 放进同一个文件夹（本仓库不包含 BIOS）
